@@ -62,7 +62,7 @@ function controlFlow() {
 
   //WHEN PLAYERS SWITCH THE LETTER SWITCHES
 
-  let end = "no";
+  let end = "";
 
   const checkEnd = () => end;
 
@@ -82,9 +82,16 @@ function controlFlow() {
   };
   const getActivePlayer = () => activePLayer;
 
-  const endGame = (end) => {
+  const endGame = (end, winner) => {
+    const resultDisplay = document.querySelector(".turn");
+
     if (end === "yes") {
-      console.log("end");
+      resultDisplay.innerText = getActivePlayer().name + " won!";
+    } else if (end === "no") {
+      switchPlayersTurn();
+      resultDisplay.innerText = getActivePlayer().name + " turn!";
+    } else {
+      resultDisplay.innerText = "it's a tie!";
     }
   };
 
@@ -99,6 +106,8 @@ function controlFlow() {
     let f = 0;
     let g = 0;
     let j = 0;
+    let r = 0;
+    let cc = 0;
     let jii = 2;
     let scoreA = 0;
     let scoreB = 0;
@@ -108,6 +117,7 @@ function controlFlow() {
     let scoreF = 0;
     let scoreG = 0;
     let scoreJ = 0;
+    let tie = "";
 
     for (var i = 0; i < 9; i++) {
       switch (true) {
@@ -207,7 +217,20 @@ function controlFlow() {
           }
           break;
 
+        case boardValues[r][cc] === "": //means spot is not empty/tie
+          if (c < 2) {
+            cc++;
+          } else if (cc === 2 && r != 2) {
+            r++;
+            cc = 0;
+          } else if (cc == 2 && r == 2) {
+            end = "tie";
+          }
+          break;
+
         default:
+          end = "no"; //means all the spots on the board have a value so its a tie
+
           break;
       }
     }
@@ -222,15 +245,16 @@ function controlFlow() {
       scoreJ === 3
     ) {
       end = "yes";
-      console.log(`${winner}` + " won the game!");
-    } else return;
+    } else if (end === "no") {
+      return end;
+    } else return end;
   };
 
   const playRound = (column, row) => {
     board.printLetter(column, row, getActivePlayer().letter);
     checkForWinner(getActivePlayer().letter);
-    switchPlayersTurn();
-    endGame(checkEnd());
+    endGame(checkEnd(), getActivePlayer().name);
+    //switchPlayersTurn();
   };
 
   return {

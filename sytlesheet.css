@@ -1,6 +1,6 @@
-body {
+/*body {
   background-color: black;
-}
+} */
 .board {
   display: grid;
   height: 500px;
@@ -22,4 +22,14 @@ body {
   border: 1px solid grey;
   background: rgb(0, 0, 0);
   cursor: pointer;
+}
+
+/*.turn {
+  rows:
+.*/
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  background-color: yellow;
 }
