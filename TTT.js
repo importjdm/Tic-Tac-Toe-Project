@@ -119,7 +119,7 @@ function controlFlow() {
     let scoreJ = 0;
     let tie = "";
 
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < 10; i++) {
       switch (true) {
         case boardValues[0][a].getValue() === winner:
           if (scoreA === 3) {
@@ -128,6 +128,7 @@ function controlFlow() {
           } else if (scoreA != 3 && a < 2) {
             scoreA++;
             a++;
+            i = 0;
           } else if (scoreA != 3) {
             scoreA++;
           }
@@ -139,6 +140,7 @@ function controlFlow() {
           } else if (scoreB != 3 && b < 2) {
             scoreB++;
             b++;
+            i = 0;
           } else if (scoreB != 3) {
             scoreB++;
           }
@@ -151,6 +153,7 @@ function controlFlow() {
           } else if (scoreC != 3 && c < 2) {
             scoreC++;
             c++;
+            i = 0;
           } else if (scoreC != 3) {
             scoreC++;
           }
@@ -163,6 +166,7 @@ function controlFlow() {
           } else if (scoreD != 3 && d < 2) {
             scoreD++;
             d++;
+            i = 0;
           } else if (scoreD != 3) {
             scoreD++;
           }
@@ -175,6 +179,7 @@ function controlFlow() {
           } else if (scoreE != 3 && e < 2) {
             scoreE++;
             e++;
+            i = 0;
           } else if (scoreE != 3) {
             scoreE++;
           }
@@ -187,6 +192,7 @@ function controlFlow() {
           } else if (scoreF != 3 && f < 2) {
             scoreF++;
             f++;
+            i = 0;
           } else if (scoreF != 3) {
             scoreF++;
           }
@@ -199,6 +205,7 @@ function controlFlow() {
           } else if (scoreG != 3 && g < 2) {
             scoreG++;
             g++;
+            i = 0;
           } else if (scoreG != 3) {
             scoreG++;
           }
@@ -212,13 +219,14 @@ function controlFlow() {
             scoreJ++;
             j++;
             jii--;
+            i = 0;
           } else if (scoreJ != 3) {
             scoreJ++;
           }
           break;
 
-        case boardValues[r][cc] === "": //means spot is not empty/tie
-          if (c < 2) {
+        case boardValues[r][cc].getValue() != false: //means spot is not empty/tie
+          if (cc < 2) {
             cc++;
           } else if (cc === 2 && r != 2) {
             r++;
@@ -229,7 +237,7 @@ function controlFlow() {
           break;
 
         default:
-          end = "no"; //means all the spots on the board have a value so its a tie
+          end = "no"; //means a spot if still empty
 
           break;
       }
@@ -247,7 +255,7 @@ function controlFlow() {
       end = "yes";
     } else if (end === "no") {
       return end;
-    } else return end;
+    } else end = "tie";
   };
 
   const playRound = (column, row) => {
