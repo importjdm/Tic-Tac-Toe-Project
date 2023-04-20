@@ -42,8 +42,15 @@ function Cell() {
 }
 
 function controlFlow() {
-  const playerOne = "Player One";
-  const playerTwo = "Player Two";
+  let playerOne = "Player One";
+  let playerTwo = "Player Two";
+
+  let getPlayerOne = () => playerOne;
+  let getPlayerTwo = () => playerTwo;
+
+  const setPlayerName = (input) => {
+    playerOne = input;
+  };
 
   const board = gameBoard();
 
@@ -117,7 +124,6 @@ function controlFlow() {
     let scoreF = 0;
     let scoreG = 0;
     let scoreJ = 0;
-    let tie = "";
 
     for (var i = 0; i < 10; i++) {
       switch (true) {
@@ -270,6 +276,9 @@ function controlFlow() {
     switchPlayersTurn,
     switchLetter,
     playRound,
+    getPlayerOne,
+    getPlayerTwo,
+    setPlayerName,
     getBoard: board.getBoard,
   };
 }
@@ -317,10 +326,48 @@ function ScreenController() {
 }
 
 ScreenController();
-//grid is made with buttons, all have listeners
-//the active player gets to click a box
-//when clicked that box turns into that persons letter
 
-//get the index and row of the button that was clicked
-//when you have put the activeplayers letter
-//
+//gets user name to displayt
+const inputNames = () => {
+  let forNames = controlFlow();
+
+  let nameOne = prompt("Player one enter your name.");
+  let nameTwo = prompt("player two please enter your name.");
+
+  const getInputNameOne = () => nameOne;
+  const getInputNameTwo = () => nameTwo;
+
+  /* getPlayerOne(nameOne);
+    getPlayerTwo(nameTwo);*/
+
+  return {
+    getInputNameOne,
+    getInputNameTwo,
+
+    /*functions below are inherited from controlFlow function by
+     calling it in this function and at the bottom calling that variable
+     with the specific function we want to inherit from it */
+    toGetNameOne: forNames.getPlayerOne,
+    toGetNameTwo: forNames.getPlayerTwo,
+    toSetName: forNames.setPlayerName,
+  };
+};
+
+const putItTogether = () => {
+  /*get all the methods from inputNames fucntion
+  and the ones passed from controlFlow */
+  const master = inputNames();
+
+  //the results functions get passed to the following variables
+  let nameOOne = master.getInputNameOne();
+  let nameTTow = master.getInputNameTwo();
+
+  const playerOne = master.toGetNameOne();
+
+  //call a function from controlFLow and pass it the new name
+  master.toSetName(nameOOne);
+};
+
+putItTogether();
+/*for some reason the user input name is not getting changed 
+from the putItTogether function */
