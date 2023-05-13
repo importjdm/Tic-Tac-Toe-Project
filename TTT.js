@@ -1,5 +1,5 @@
 //Module that makes grid
-function gameBoard() {
+const gameBoard = () => {
   const board = [];
   const rows = 3;
   const columns = 3;
@@ -25,9 +25,9 @@ function gameBoard() {
   };
 
   return { getBoard, printLetter };
-}
+};
 
-function Cell() {
+const Cell = () => {
   let value = "";
 
   const addLetter = (player) => {
@@ -39,24 +39,18 @@ function Cell() {
     addLetter,
     getValue,
   };
-}
+};
+//gets players name's
 
-function controlFlow() {
-  let playerOne = "Player One";
-  let playerTwo = "Player Two";
+let playerOne = prompt("Player one enter your name.");
+let playerTwo = prompt("Player two enter your name.");
 
-  let getPlayerOne = () => playerOne;
-  let getPlayerTwo = () => playerTwo;
-
-  const setPlayerName = (input) => {
-    playerOne = input;
-  };
-
+const controlFlow = () => {
   const board = gameBoard();
 
   let letter = "";
-  //object of players
-  const players = [
+  //array object of players
+  let players = [
     {
       name: playerOne,
       letter: "X",
@@ -83,12 +77,10 @@ function controlFlow() {
       activePLayer = players[0];
     }
   };
-  //switches letter when player changes
-  const switchLetter = () => {
-    letter = activePLayer.letter;
-  };
+
   const getActivePlayer = () => activePLayer;
 
+  //checks if anyone has won, tie, if not next players turn
   const endGame = (end, winner) => {
     const resultDisplay = document.querySelector(".turn");
 
@@ -96,7 +88,7 @@ function controlFlow() {
       resultDisplay.innerText = getActivePlayer().name + " won!";
     } else if (end === "no") {
       switchPlayersTurn();
-      resultDisplay.innerText = getActivePlayer().name + " turn!";
+      resultDisplay.innerText = getActivePlayer().name + "'s turn!";
     } else {
       resultDisplay.innerText = "it's a tie!";
     }
@@ -274,18 +266,16 @@ function controlFlow() {
   return {
     getActivePlayer,
     switchPlayersTurn,
-    switchLetter,
     playRound,
-    getPlayerOne,
-    getPlayerTwo,
-    setPlayerName,
     getBoard: board.getBoard,
   };
-}
+};
 
-function ScreenController() {
+const ScreenController = () => {
   const game = controlFlow();
   const boardDiv = document.querySelector(".board");
+  //const startButton = document.querySelector(".Start");
+  const restartButton = document.querySelector(".Restart");
 
   const updateScreen = () => {
     //get newest version of board and player turn
@@ -298,7 +288,7 @@ function ScreenController() {
       row.forEach((column, index) => {
         //for each emtpy array in the gameBoard add button
         const cell = document.createElement("button");
-        cell.classList.add(".cell");
+        cell.classList.add("cell");
         //Create a data attribute to identify the column
         //Makes it easier to know which square to change
         cell.dataset.row = index1;
@@ -308,6 +298,8 @@ function ScreenController() {
       });
     });
   };
+
+  const getUpdateScreen = () => updateScreen;
 
   //Add event listener for the board
   function clickCell(e) {
@@ -319,55 +311,45 @@ function ScreenController() {
     game.playRound(selectedColumn, selectedRow);
     updateScreen();
   }
-
+  //add event listener to buttons aka cells
   boardDiv.addEventListener("click", clickCell);
-  //initial render
-  updateScreen();
+
+  //what happens when restart button is pressed
+  const restart = () => {
+    const turnDisplay = document.querySelector(".turn");
+    turnDisplay.innerText = "Game Reset" + playerOne + "'s turn";
+    let button = document.querySelectorAll(".cell");
+    button.forEach(function (cell) {
+      cell.innerText = "";
+    });
+
+    ScreenController();
+  };
+
+  //restart button
+  restartButton.addEventListener("click", restart);
+  return { restart, updateScreen, getUpdateScreen };
+};
+
+//press start button to start game
+function startGame() {
+  //gets updateScreen function
+  const controlScreen = ScreenController();
+  const updateScreenz = controlScreen.updateScreen;
+
+  //gets start button
+  const startButton = document.querySelector(".Start");
+
+  //listener is invoked once once true listener is taken off
+  startButton.addEventListener(
+    "click",
+    () => {
+      updateScreenz();
+      console.log("ran once");
+    },
+    { once: true }
+  );
 }
 
 ScreenController();
-
-//gets user name to displayt
-const inputNames = () => {
-  let forNames = controlFlow();
-
-  let nameOne = prompt("Player one enter your name.");
-  let nameTwo = prompt("player two please enter your name.");
-
-  const getInputNameOne = () => nameOne;
-  const getInputNameTwo = () => nameTwo;
-
-  /* getPlayerOne(nameOne);
-    getPlayerTwo(nameTwo);*/
-
-  return {
-    getInputNameOne,
-    getInputNameTwo,
-
-    /*functions below are inherited from controlFlow function by
-     calling it in this function and at the bottom calling that variable
-     with the specific function we want to inherit from it */
-    toGetNameOne: forNames.getPlayerOne,
-    toGetNameTwo: forNames.getPlayerTwo,
-    toSetName: forNames.setPlayerName,
-  };
-};
-
-const putItTogether = () => {
-  /*get all the methods from inputNames fucntion
-  and the ones passed from controlFlow */
-  const master = inputNames();
-
-  //the results functions get passed to the following variables
-  let nameOOne = master.getInputNameOne();
-  let nameTTow = master.getInputNameTwo();
-
-  const playerOne = master.toGetNameOne();
-
-  //call a function from controlFLow and pass it the new name
-  master.toSetName(nameOOne);
-};
-
-putItTogether();
-/*for some reason the user input name is not getting changed 
-from the putItTogether function */
+startGame();
